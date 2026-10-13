@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Expense Tracker</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>💰 Smart Expense Tracker</h1>
+      <p>Personal Finance Dashboard</p>
+    </div>
+    <label class="month-box">Current Month
+      <input type="month" id="monthPicker">
+    </label>
+  </header>
+
+  <main class="container">
+    <section class="cards">
+      <div class="card stat"><span>Total Spending</span><strong id="totalSpending">₹0.00</strong><small id="topCategory">&nbsp;</small></div>
+      <div class="card stat"><span>Monthly Budget</span><strong id="monthlyBudget">₹0.00</strong><small>Sum of category budgets</small></div>
+      <div class="card stat"><span>Remaining Budget</span><strong id="remainingBudget">₹0.00</strong><small id="remainingNote">&nbsp;</small></div>
+      <div class="card stat"><span>Transactions</span><strong id="txCount">0</strong><small>This month</small></div>
+    </section>
+
+    <section id="alerts" class="alerts"></section>
+
+    <section class="grid-2">
+      <div class="card">
+        <h2 id="formTitle">Add Expense</h2>
+        <form id="txForm" novalidate>
+          <label>Description
+            <input type="text" id="description" maxlength="255" placeholder="e.g. Uber ride to college" autocomplete="off">
+          </label>
+          <div id="aiBox" class="ai-box muted">🤖 AI will suggest a category as you type.</div>
+          <div class="row">
+            <label>Amount (₹)<input type="number" id="amount" min="0.01" step="0.01" placeholder="250"></label>
+            <label>Date<input type="date" id="txDate"></label>
+          </div>
+          <div class="row">
+            <label>Payment Method
+              <select id="paymentMethod">
+                <option>Cash</option><option>UPI</option><option>Credit Card</option>
+                <option>Debit Card</option><option>Net Banking</option><option>Other</option>
+              </select>
+            </label>
+            <label>Category<select id="category"></select></label>
+          </div>
+          <label>Notes<textarea id="notes" rows="2" maxlength="1000" placeholder="Optional"></textarea></label>
+          <div class="actions">
+            <button type="submit" class="btn primary" id="saveBtn">Save Transaction</button>
+            <button type="button" class="btn" id="cancelEditBtn" hidden>Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Budgets</h2>
+        <form id="budgetForm" class="row wrap" novalidate>
+          <label>Category<select id="budgetCategory"></select></label>
+          <label>Month<select id="budgetMonth"></select></label>
+          <label>Year<input type="number" id="budgetYear" min="2000" max="2100"></label>
+          <label>Budget (₹)<input type="number" id="budgetAmount" min="1" step="0.01" placeholder="7000"></label>
+          <div class="actions full">
+            <button type="submit" class="btn primary" id="budgetSaveBtn">Save Budget</button>
+            <button type="button" class="btn" id="budgetCancelBtn" hidden>Cancel</button>
+          </div>
+        </form>
+        <div id="budgetList" class="budget-list"></div>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <div class="card"><h2>Spending by Category</h2><div class="chart-box"><canvas id="pieChart"></canvas><p id="pieEmpty" class="empty" hidden>No spending recorded this month.</p></div></div>
+      <div class="card"><h2>Budget vs Actual</h2><div class="chart-box"><canvas id="barChart"></canvas><p id="barEmpty" class="empty" hidden>No budgets set for this month.</p></div></div>
+    </section>
+
+    <section class="card">
+      <h2>Transactions</h2>
+      <div class="filters">
+        <input type="search" id="filterSearch" placeholder="Search description…">
+        <select id="filterCategory"></select>
+        <input type="date" id="filterDate" title="Filter by date">
+        <input type="number" id="filterMin" min="0" placeholder="Min ₹">
+        <input type="number" id="filterMax" min="0" placeholder="Max ₹">
+        <button class="btn" id="clearFilters" type="button">Clear</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Description</th><th>Category</th><th class="num">Amount</th><th>Payment</th><th>AI Confidence</th><th>Actions</th></tr></thead>
+          <tbody id="txBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="toasts" class="toasts"></div>
+  <script src="/static/dashboard.js"></script>
+</body>
+</html>

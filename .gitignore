@@ -1,0 +1,11 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+backend/model/*.pkl
+database/*.sqlite
+database/*.sqlite-journal
+.idea/
+.vscode/
+*.log
+
